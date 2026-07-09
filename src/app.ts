@@ -4,6 +4,10 @@ import cors from "cors";
 import config from "./config";
 import cookieParser from "cookie-parser";
 import { prisma } from "./lib/prisma";
+import { authRoutes } from "./modules/auth/auth.route.";
+import { globalErrorHandler } from "./middlewares/globalErrorHandler";
+import { notFound } from "./middlewares/notFound";
+import logger from "./middlewares/logger";
 
 const app:Application = express();
 
@@ -12,6 +16,7 @@ app.use(cors({
     credentials: true
 }));
 
+app.use(logger);
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({extended: true}));
@@ -24,7 +29,12 @@ app.get("/", async(req: Request, res: Response)=>{
     res.send("hello world");
 });
 
-app.use("/api/auth",()=>{});
+app.use("/api/auth", authRoutes);
 
+
+app.use(notFound);
+app.use(globalErrorHandler);
+
+// ! remove comment from logger.ts before deploy
 
 export default app;

@@ -7,4 +7,5 @@ configDotenv({path: path.resolve(process.cwd(), ".env"), quiet:true});
 export default {
     port: env.PORT || 5000,
     app_url: env.APP_URL,
+    bcrypt_salt_rounds : env.BCRYPT_SALT_ROUNDS!,
 }

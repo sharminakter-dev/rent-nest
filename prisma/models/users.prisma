@@ -7,7 +7,7 @@ model User {
   address  String? @db.VarChar(255)
 
   status UserStatus @default(ACTIVE)
-  role   Role
+  role   Role @default(TENANT)
 
   properties Property[]
   rentals    RentalRequest[] @relation("TenantRentals")
