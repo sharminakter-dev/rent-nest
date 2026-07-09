@@ -8,6 +8,7 @@ import { authRoutes } from "./modules/auth/auth.route.";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import { notFound } from "./middlewares/notFound";
 import logger from "./middlewares/logger";
+import { landlordRoutes } from "./modules/landlord/landlord.route";
 
 const app:Application = express();
 
@@ -30,6 +31,7 @@ app.get("/", async(req: Request, res: Response)=>{
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/landlord/", landlordRoutes);
 
 
 app.use(notFound);

@@ -7,7 +7,7 @@ import { jwtUtils } from "../../utils/jwt";
 import { type JwtPayload, type SignOptions } from "jsonwebtoken"
 
 const createUserIntoDB = async(payload: ICreateUser)=>{
-    const {name, email, password, role, phone, address} = payload;
+    const {name, email, password, role, profilePhoto, phone, address} = payload;
 
     const isUserExist = await prisma.user.findUnique({
         where: {email}
@@ -32,7 +32,12 @@ const createUserIntoDB = async(payload: ICreateUser)=>{
             name,
             email,
             password: hashedPassword,
-            role
+            role,
+            profile:{
+                create:{
+                    profilePhoto
+                }
+            },
         }
     });
 

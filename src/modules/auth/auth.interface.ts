@@ -1,15 +1,16 @@
 import type { Role } from "../../../generated/prisma/enums"
 
 export interface ICreateUser{
-    name: string,
-    email: string,
-    password: string,
-    role: Role,
-    phone?: string
-    address?: string,
+    name: string;
+    email: string;
+    password: string;
+    role: Role;
+    profilePhoto?: string;
+    phone?: string;
+    address?: string
 }
 
 export interface ILoginUser{
-    email: string,
+    email: string;
     password: string
 }
