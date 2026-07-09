@@ -18,7 +18,7 @@ export const sendResponse = <T>(res: Response, data:TResponseData<T>)=>{
     res.status(data.statusCode).json({
         success: true,
         statusCode: data.statusCode,
-        message: "User Created Successfylly",
+        message: data.message,
         data: data.data,
         meta: data.meta
     });

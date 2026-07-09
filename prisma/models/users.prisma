@@ -13,6 +13,7 @@ model User {
   rentals    RentalRequest[] @relation("TenantRentals")
   requests   RentalRequest[] @relation("LandlordRentals")
   reviews    Review[]
+  profile Profile?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
