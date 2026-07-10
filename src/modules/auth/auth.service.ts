@@ -48,6 +48,14 @@ const createUserIntoDB = async(payload: ICreateUser)=>{
         omit:{
             password: true,
         },
+        include:{
+            profile:{
+                select:{
+                    profilePhoto: true,
+                    bio: true
+                }
+            }
+        }
     });
 
     return user

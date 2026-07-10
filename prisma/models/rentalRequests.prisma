@@ -1,10 +1,10 @@
 model RentalRequest {
   id String @id @default(uuid())
 
-  statDate       DateTime
-  durationMonths Int
+  message String?
 
-  monthlyRent Decimal @db.Decimal(10, 2)
+  startDate       DateTime
+  durationMonths Int
 
   status RentalStatus @default(PENDING)
 
@@ -13,9 +13,6 @@ model RentalRequest {
 
   tenantId String
   tenant   User   @relation("TenantRentals", fields: [tenantId], references: [id], onDelete: Cascade)
-
-  landlordId String
-  landlord   User   @relation("LandlordRentals", fields: [landlordId], references: [id], onDelete: Cascade)
 
   payment Payment?
   review  Review?

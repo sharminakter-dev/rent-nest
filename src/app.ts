@@ -11,6 +11,7 @@ import logger from "./middlewares/logger";
 import { landlordRoutes } from "./modules/landlord/landlord.route";
 import { propertyRoutes } from "./modules/properties/properties.route";
 import { categoryRoutes } from "./modules/categories/categories.route";
+import { rentalRoutes } from "./modules/rentals/rentals.route";
 
 const app:Application = express();
 
@@ -36,7 +37,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/landlord", landlordRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/categories", categoryRoutes);
-app.use("/api/rentals", ()=>{});
+app.use("/api/rentals", rentalRoutes);
 app.use("/api/payments", ()=>{});
 app.use("/api/reviews", ()=>{});
 app.use("/api/admin", ()=>{});
