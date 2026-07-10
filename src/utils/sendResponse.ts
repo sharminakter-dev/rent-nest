@@ -1,8 +1,8 @@
 import type { Response } from "express";
 
 type TMetaData = {
-    page: number,
-    limit: number,
+    page?: number,
+    limit?: number,
     total: number
 }
 
