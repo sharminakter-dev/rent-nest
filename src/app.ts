@@ -13,7 +13,7 @@ import { propertyRoutes } from "./modules/properties/properties.route";
 import { categoryRoutes } from "./modules/categories/categories.route";
 import { rentalRoutes } from "./modules/rentals/rentals.route";
 import { paymentRoutes } from "./modules/payment/payment.route";
-import { reviewRoutes } from "./modules/reviews/reviews";
+import { reviewRoutes } from "./modules/reviews/reviews.route";
 import { adminRoutes } from "./modules/admin/admin.router";
 
 const app:Application = express();

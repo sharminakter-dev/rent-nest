@@ -20,8 +20,6 @@ export const handleCheckoutCompleted = async(session: Stripe.Checkout.Session)=>
 
     const existing = await prisma.payment.findUnique({ where: { transactionId } });
 
-    console.log("existing payment row:", existing); 
-
     if (existing?.status === "SUCCESS") {
         return; 
     }
@@ -40,6 +38,7 @@ export const handleCheckoutCompleted = async(session: Stripe.Checkout.Session)=>
                 rentalRequestId,
                 tenantId,
                 landlordId: rentalRequest.property.landlordId,
+                propertyId: rentalRequest.propertyId,
                 amount: rentalRequest.property.rent,
                 status: "SUCCESS",
                 paidAt: new Date(),
