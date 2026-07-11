@@ -12,6 +12,11 @@ model User {
   properties Property[]
   rentals    RentalRequest[] @relation("TenantRentals")
   reviews    Review[]
+
+
+  tenantPayments Payment[] @relation("TenantPayments")
+  landlordPayments Payment[] @relation("LandlordPayments")
+  
   profile Profile?
 
   createdAt DateTime @default(now())

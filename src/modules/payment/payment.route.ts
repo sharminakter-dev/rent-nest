@@ -6,21 +6,20 @@ import { paymentController } from "./payment.controller";
 const router = Router();
 
 router.post("/create",
-    auth(Role.TENANT), 
+    auth(Role.TENANT, Role.LANDLORD, Role.TENANT), 
     paymentController.createPayment
 );
 
 router.post("/confirm",
-    auth(Role.TENANT), 
     paymentController.confirmPayment
 );
 
 router.get("/",
-    auth(Role.TENANT), 
+    auth(Role.TENANT, Role.ADMIN, Role.LANDLORD),
     paymentController.getMyPaymentHistory
 );
 
-router.post("/:id",
+router.get("/:id",
     auth(Role.TENANT, Role.ADMIN), 
     paymentController.getPaymentById
 );

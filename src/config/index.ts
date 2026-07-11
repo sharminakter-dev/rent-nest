@@ -11,5 +11,7 @@ export default {
     jwt_access_secret: env.JWT_ACCESS_SECRET!,
     jwt_access_expires_in: env.JWT_ACCESS_EXPIRES_IN!,
     jwt_refresh_secret: env.JWT_REFRESH_SECRET!,
-    jwt_refresh_expires_in: env.JWT_REFRESH_EXPIRES_IN!
+    jwt_refresh_expires_in: env.JWT_REFRESH_EXPIRES_IN!,
+    stripe_secret_key: env.STRIPE_SECRET_KEY!,
+    stripe_webhook_secret: env.STRIPE_WEBHOOK_SECRET!
 }

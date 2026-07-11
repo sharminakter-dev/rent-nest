@@ -13,7 +13,14 @@ enum RentalStatus {
   APPROVED
   REJECTED
   PENDING
-  ACITVE 
+  ACTIVE 
   COMPLETED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
 }
 
