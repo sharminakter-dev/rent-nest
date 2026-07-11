@@ -13,5 +13,7 @@ enum RentalStatus {
   APPROVED
   REJECTED
   PENDING
+  ACITVE 
+  COMPLETED
 }
 

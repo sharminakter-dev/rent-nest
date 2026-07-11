@@ -1,7 +1,12 @@
 import { prisma } from "../../lib/prisma"
-import type { ICreatePropertyPayload, IUdateProertyPayload } from "./landlord.interface"
+import type { ICreatePropertyPayload, IStatusPayload, IUdateProertyPayload } from "./landlord.interface"
 
-const createProperty = async(landlordId: string, payload: ICreatePropertyPayload)=>{
+const createProperty = async(landlordId: string, isActive:boolean, payload: ICreatePropertyPayload)=>{
+    
+    if(!isActive){
+        throw new Error("Your Account is Banned. Please Cantact Authority.")
+    }
+
     const {category:categoryData, ...rest} = payload;
 
     const category = await prisma.category.upsert({
@@ -27,7 +32,11 @@ const createProperty = async(landlordId: string, payload: ICreatePropertyPayload
     return property;
 }
 
-const updateProperty = async(propertyId:string, landlordId: string, payload: IUdateProertyPayload)=>{
+const updateProperty = async(propertyId:string, landlordId: string, isActive:boolean, payload: IUdateProertyPayload)=>{
+
+    if(!isActive){
+        throw new Error("Your Account is Banned. Please Cantact Authority.")
+    }
 
     const property = await prisma.property.findUniqueOrThrow({
         where: {
@@ -53,7 +62,10 @@ const updateProperty = async(propertyId:string, landlordId: string, payload: IUd
     return updateProperty;
 }
 
-const deleteProperty = async(propertyId:string, landlordId: string)=>{
+const deleteProperty = async(propertyId:string, landlordId: string, isActive: boolean)=>{
+    if(!isActive){
+        throw new Error("Your Account is Banned. Please Cantact Authority.")
+    }
 
     const property = await prisma.property.findUniqueOrThrow({
         where: {
@@ -75,10 +87,63 @@ const deleteProperty = async(propertyId:string, landlordId: string)=>{
     return null
 }
 
-const getRentalRequests = async()=>{
+const getRentalRequests = async(landlordId: string, isActive: boolean)=>{
+
+     if(!isActive){
+        throw new Error("Your Account is Banned. Please Cantact Authority.")
+    }
+
+    const rentRequests = await prisma.rentalRequest.findMany({
+        where: {
+            property:{
+                landlordId
+            }
+        },
+        include:{
+            tenant:{
+                select: { id: true, name: true, email: true },
+            },
+            property:{
+                select: {id: true, title: true, rent: true}
+            }
+        }
+    });
+
+    return rentRequests;
+
 }
 
-const updateRentalStatus = async()=>{
+const updateRentalStatus = async(rentalReqId : string, payload: IStatusPayload)=>{
+
+    const rentalTransaction = await prisma.$transaction( async(tx)=>{
+        await tx.rentalRequest.update({
+            where:{
+                id: rentalReqId
+            },
+            data:{
+                status: payload.status
+            }
+        });
+
+        const rental = await tx.rentalRequest.findUniqueOrThrow({
+            where:{
+                id: rentalReqId
+            },
+            include:{
+                tenant:{
+                    select: { id: true, name: true, email: true },
+                },
+                property:{
+                    select: {id: true, title: true, rent: true}
+                }
+            }
+        });
+
+        return rental;
+    });
+
+    return rentalTransaction;
+
 }
 
 

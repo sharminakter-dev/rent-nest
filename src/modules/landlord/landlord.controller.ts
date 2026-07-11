@@ -8,8 +8,9 @@ const createProperty = catchAsync( async(req: Request, res: Response)=>{
 
     const landlordId = req.user?.id!;
     const payload = req.body;
+    const isActive = req.user?.status === "ACTIVE";
 
-    const result = await landlordServices.createProperty(landlordId, payload);
+    const result = await landlordServices.createProperty(landlordId, isActive, payload);
 
     sendResponse(res, {
         success: true,
@@ -25,7 +26,9 @@ const updateProperty = catchAsync( async(req: Request, res: Response)=>{
     const landlordId = req.user?.id;
     const payload = req.body;
 
-    const result = await landlordServices.updateProperty(propertyId as string, landlordId as string, payload);
+    const isActive = req.user?.status === "ACTIVE";
+
+    const result = await landlordServices.updateProperty(propertyId as string, landlordId as string, isActive, payload);
 
     sendResponse(res, {
         success: true,
@@ -39,8 +42,9 @@ const deleteProperty = catchAsync( async(req: Request, res: Response)=>{
 
     const propertyId = req.params.id;
     const landlordId = req.user?.id!;
+    const isActive = req.user?.status === "ACTIVE";
 
-    await landlordServices.deleteProperty(propertyId as string, landlordId)
+    await landlordServices.deleteProperty(propertyId as string, landlordId, isActive)
 
     sendResponse(res, {
         success: true,
@@ -52,6 +56,12 @@ const deleteProperty = catchAsync( async(req: Request, res: Response)=>{
 
 const getRentalRequests = catchAsync( async(req: Request, res: Response)=>{
 
+    const landlordId = req.user?.id!;
+    const isActive = req.user?.status === "ACTIVE";
+
+
+    const result = await landlordServices.getRentalRequests(landlordId, isActive);
+
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
@@ -61,6 +71,11 @@ const getRentalRequests = catchAsync( async(req: Request, res: Response)=>{
 });
 
 const updateRentalStatus = catchAsync( async(req: Request, res: Response)=>{
+
+    const rentalReqId = req.params.id;
+    const payload = req.body
+
+    const result = await landlordServices.updateRentalStatus(rentalReqId as string, payload)
 
     sendResponse(res, {
         success: true,

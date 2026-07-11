@@ -11,6 +11,7 @@ const createRentalReq =  async(tenantId: string, payload: IRentalPayload)=>{
         data: {
             ...rest,
             startDate: startDateISO,
+            status: "PENDING",
             tenantId,
         }
     });

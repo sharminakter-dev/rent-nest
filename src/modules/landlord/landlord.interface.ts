@@ -20,3 +20,8 @@ export interface IUdateProertyPayload{
     rent: number;
     isAvailable: boolean
 }
+
+export interface IStatusPayload{
+    status:"APPROVED" | "REJECTED"
+}
+     

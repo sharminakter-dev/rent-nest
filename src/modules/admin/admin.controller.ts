@@ -43,7 +43,7 @@ const getAllRentals = catchAsync( async(req: Request, res: Response)=>{
     });
 });
 
-export const userController = {
+export const adminController = {
     getAllUsers,
     updateUserStatus,
     getAllProperties,
