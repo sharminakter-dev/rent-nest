@@ -106,6 +106,9 @@ const getRentalRequests = async(landlordId: string, isActive: boolean)=>{
             property:{
                 select: {id: true, title: true, rent: true}
             }
+        },
+        orderBy:{
+            createdAt: "desc"
         }
     });
 

@@ -10,8 +10,6 @@ const createPayment = catchAsync( async(req: Request, res: Response)=>{
     const isTenant = req.user?.role === "TENANT";
     const {rentalRequestId} = req.body;
 
-    console.log("userId :" , userId)
-
     const result = await paymentService.createPayment(userId, isTenant, rentalRequestId);
 
     sendResponse(res, {

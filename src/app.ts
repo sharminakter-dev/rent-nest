@@ -51,6 +51,5 @@ app.use("/api/admin", adminRoutes);
 app.use(notFound);
 app.use(globalErrorHandler);
 
-// ! remove comment from logger.ts before deploy
 
 export default app;
