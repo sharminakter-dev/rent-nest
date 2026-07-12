@@ -1,3 +1,4 @@
+import type { Prisma } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma"
 import type { ICreatePropertyPayload, IStatusPayload, IUdateProertyPayload } from "./landlord.interface"
 
@@ -118,7 +119,7 @@ const getRentalRequests = async(landlordId: string, isActive: boolean)=>{
 
 const updateRentalStatus = async(rentalReqId : string, payload: IStatusPayload)=>{
 
-    const rentalTransaction = await prisma.$transaction( async(tx)=>{
+    const rentalTransaction = await prisma.$transaction( async(tx: Prisma.TransactionClient)=>{
         await tx.rentalRequest.update({
             where:{
                 id: rentalReqId

@@ -4,6 +4,8 @@ import config from "../../config";
 import { prisma } from "../../lib/prisma"
 import stripe from "../../lib/stripe";
 import { handleCheckoutCompleted } from "./payment.utils";
+import type { Prisma } from "../../../generated/prisma/client";
+
 
 const createPayment = async(userId: string, isTenant: boolean, rentalRequestId: string)=>{
 
@@ -11,7 +13,7 @@ const createPayment = async(userId: string, isTenant: boolean, rentalRequestId: 
         throw new Error("Only TENANT can create a payment request");
     }
 
-    const paymentData = await prisma.$transaction( async(tx)=>{
+    const paymentData = await prisma.$transaction( async(tx: Prisma.TransactionClient)=>{
 
         const user = await tx.user.findUniqueOrThrow({
             where:{id: userId},

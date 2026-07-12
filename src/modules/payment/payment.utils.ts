@@ -1,6 +1,8 @@
 import Stripe from "stripe";
 import { prisma } from "../../lib/prisma";
 import stripe from "../../lib/stripe";
+import type { Prisma } from "../../../generated/prisma/client";
+
 
 export const handleCheckoutCompleted = async(session: Stripe.Checkout.Session)=>{
 
@@ -38,7 +40,7 @@ export const handleCheckoutCompleted = async(session: Stripe.Checkout.Session)=>
     
     console.log("4");
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
         await tx.payment.upsert({
             where: { rentalRequestId },
             update: { status: "SUCCESS", paidAt: new Date(), transactionId },
