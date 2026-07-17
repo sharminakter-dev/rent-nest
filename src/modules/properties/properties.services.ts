@@ -14,6 +14,10 @@ const getAllProperties = async (query: IPropertyQuery)=>{
 
     const andCondition: PropertyWhereInput[] =  [];
 
+    andCondition.push({
+        isAvailable: true
+    });
+
     if(query.searchTerm){
         andCondition.push(
             {
@@ -100,9 +104,6 @@ const getAllProperties = async (query: IPropertyQuery)=>{
         )
     }
 
-    // andConditions.push(
-
-    // )
 
     const properties = await prisma.property.findMany({
 

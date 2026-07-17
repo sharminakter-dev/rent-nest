@@ -37,4 +37,10 @@ router.patch(
     landlordController.updateRentalStatus
 );
 
+router.get(
+    "/reviews", 
+    auth(Role.LANDLORD),
+    landlordController.getMyRentalReviews
+);
+
 export const landlordRoutes = router;

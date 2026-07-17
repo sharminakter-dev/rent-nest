@@ -90,7 +90,7 @@ const deleteProperty = async(propertyId:string, landlordId: string, isActive: bo
 
 const getRentalRequests = async(landlordId: string, isActive: boolean)=>{
 
-     if(!isActive){
+    if(!isActive){
         throw new Error("Your Account is Banned. Please Cantact Authority.")
     }
 
@@ -106,6 +106,9 @@ const getRentalRequests = async(landlordId: string, isActive: boolean)=>{
             },
             property:{
                 select: {id: true, title: true, rent: true}
+            },
+            review:{
+                select: {comment: true}
             }
         },
         orderBy:{
@@ -150,11 +153,38 @@ const updateRentalStatus = async(rentalReqId : string, payload: IStatusPayload)=
 
 }
 
+const getMyRentalReviews = async(landlordId: string, isActive: boolean)=>{
+
+    if(!isActive){
+        throw new Error("Your Account is Banned. Please Cantact Authority.")
+    }
+
+    const myReviews = await prisma.review.findMany({
+        where:{
+            property:{
+                landlordId
+            }
+        },
+        include:{
+            property:{
+                select: {id: true, description: true}
+            },
+            tenant:{
+                select: {id: true, name: true, email: true}
+            }
+        }
+    });
+
+    return myReviews;
+
+}
+
 
 export const landlordServices = {
     createProperty,
     updateProperty,
     deleteProperty,
     getRentalRequests,
-    updateRentalStatus
+    updateRentalStatus,
+    getMyRentalReviews
 }
