@@ -1,5 +1,5 @@
 export interface IReviewPayload{
-    propertyId: string,
+    rentalId: string,
     rating: number,
     comment: string
 }

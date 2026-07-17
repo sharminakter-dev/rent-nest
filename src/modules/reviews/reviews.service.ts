@@ -3,20 +3,11 @@ import type { IReviewPayload } from "./reviews.interface";
 
 const createReview = async(userId: string, payload: IReviewPayload)=>{
 
-    const {propertyId} = payload;
-    
-    const property = await prisma.property.findUnique({
-        where: {
-            id: propertyId
-        }
-    });
+    const {rentalId, ...rest} = payload;
 
-    if(!propertyId){
-        throw new Error("Property Does Not Exist.")
-    }
-
-    const rental = await prisma.rentalRequest.findFirst({
+    const rental = await prisma.rentalRequest.findUnique({
         where:{
+            id:rentalId,
             tenantId: userId,
             status: "ACTIVE"
         }
@@ -28,9 +19,10 @@ const createReview = async(userId: string, payload: IReviewPayload)=>{
 
     const review = await prisma.review.create({
         data:{
-            ...payload,
+            ...rest,
             tenantId: userId,
-            rentalRequestId: rental.id
+            propertyId: rental.propertyId,
+            rentalRequestId: rentalId
         }
     });
 
