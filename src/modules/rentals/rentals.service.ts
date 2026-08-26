@@ -1,5 +1,7 @@
 import { prisma } from "../../lib/prisma";
 import type { IRentalPayload } from "./rentals.interface";
+import { autoCompleteExpiredRentals } from "./rentals.utils";
+
 
 const createRentalReq =  async(tenantId: string, payload: IRentalPayload)=>{
 
@@ -46,27 +48,17 @@ const createRentalReq =  async(tenantId: string, payload: IRentalPayload)=>{
 };
 
 const getMyRentalReq =  async(tenantId: string)=>{
+
+    await autoCompleteExpiredRentals(undefined, tenantId);
+
     const rentalReqs = await prisma.rentalRequest.findMany({
         where:{
             tenantId
         },
         include:{
-            property:{
-                select:{
-                    title: true,
-                    isAvailable: true
-                }
-            },
-            tenant: {
-                select:{
-                    name: true
-                }
-            },
-            review:{
-                select:{
-                    rating:true
-                }
-            }
+            property:{ select:{title: true, isAvailable: true} },
+            tenant: { select:{name: true} },
+            review:{ select:{rating:true} }
         }
     });
 
@@ -81,27 +73,20 @@ const getMyRentalReq =  async(tenantId: string)=>{
 
 const getRentalReqById =  async(rentalId : string)=>{
 
+    const existing = await prisma.rentalRequest.findUniqueOrThrow({ where: { id: rentalId } });
+
+    if(existing?.status === "ACTIVE"){
+        await autoCompleteExpiredRentals();
+    }
+
     const rental = await prisma.rentalRequest.findUniqueOrThrow({
         where:{
             id: rentalId
         },
         include:{
-            property:{
-                select:{
-                    title: true,
-                    isAvailable: true
-                }
-            },
-            tenant: {
-                select:{
-                    name: true
-                }
-            },
-            review:{
-                select:{
-                    rating:true
-                }
-            }
+            property:{ select:{ title: true, isAvailable: true} },
+            tenant: { select:{name: true} },
+            review:{ select:{rating:true} }
         }
     });
 
@@ -132,6 +117,7 @@ const deleteRentalReq = async(tenantId: string, rentalId: string)=>{
 
     return result;
 };
+
 
 export const rentalServices = {
     createRentalReq,

@@ -5,11 +5,11 @@ const createReview = async(userId: string, payload: IReviewPayload)=>{
 
     const {rentalId, ...rest} = payload;
 
-    const rental = await prisma.rentalRequest.findUnique({
+    const rental = await prisma.rentalRequest.findFirst({
         where:{
-            id:rentalId,
+            id: rentalId,
             tenantId: userId,
-            status: "ACTIVE"
+            status: { in: ["ACTIVE", "COMPLETED"] }
         }
     });
 

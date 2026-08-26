@@ -1,6 +1,7 @@
 import { use } from "react";
 import type { UserStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
+import { autoCompleteExpiredRentals } from "../rentals/rentals.utils";
 
 const getAllUsers = async()=>{
 
@@ -68,6 +69,8 @@ const getAllProperties = async()=>{
 };
 
 const getAllRentals = async()=>{
+
+    await autoCompleteExpiredRentals();
 
     const rentals = await prisma.rentalRequest.findMany({
         include:{

@@ -15,30 +15,26 @@ export const handleCheckoutCompleted = async(session: Stripe.Checkout.Session)=>
         return
     }
 
-    console.log("1");
-
     if (session.payment_status !== "paid") {
         console.log("Webhook: session completed but not paid", session.id);
         return;
     }
 
-    console.log("2");
-
     const existing = await prisma.payment.findUnique({ where: { transactionId } });
-
-    console.log("3");
 
     if (existing?.status === "SUCCESS") {
         return; 
     }
 
-
     const rentalRequest = await prisma.rentalRequest.findUniqueOrThrow({
         where: { id: rentalRequestId },
         include: { property: true },
-    });
-    
-    console.log("4");
+    });  
+
+    if (rentalRequest.status !== "APPROVED") {
+        console.log(`Webhook: rental ${rentalRequestId} no longer APPROVED (now ${rentalRequest.status}), skipping activation`);
+        return;
+    }
 
     await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
         await tx.payment.upsert({

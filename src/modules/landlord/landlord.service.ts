@@ -1,5 +1,6 @@
 import type { Prisma } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma"
+import { autoCompleteExpiredRentals } from "../rentals/rentals.utils";
 import type { ICreatePropertyPayload, IStatusPayload, IUdateProertyPayload } from "./landlord.interface"
 
 const createProperty = async(landlordId: string, isActive:boolean, payload: ICreatePropertyPayload)=>{
@@ -93,6 +94,8 @@ const getRentalRequests = async(landlordId: string, isActive: boolean)=>{
     if(!isActive){
         throw new Error("Your Account is Banned. Please Cantact Authority.")
     }
+
+    await autoCompleteExpiredRentals(landlordId);
 
     const rentRequests = await prisma.rentalRequest.findMany({
         where: {
