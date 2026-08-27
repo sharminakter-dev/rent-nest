@@ -7,14 +7,30 @@ import { catchAsync } from "../../utils/catchAsync";
 const createUser = catchAsync(async(req: Request, res: Response)=>{
     const payload = req.body;
     
-    const result = await authServices.createUserIntoDB(payload);
+    const {user, accessToken, refreshToken} = await authServices.createUserIntoDB(payload);
+
+    // set tokens in cookie
+    res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite:"none",
+        maxAge: 1000 * 60 * 60 * 24
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite:"none",
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    })
+
     
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.CREATED,
         message: "User Created Successfully",
         data:{
-            result
+            user
         }
     });
 });
