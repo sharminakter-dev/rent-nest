@@ -18,8 +18,10 @@ import { adminRoutes } from "./modules/admin/admin.router";
 
 const app:Application = express();
 
+console.log("APP_URL VALUE:", JSON.stringify(config.app_url));
+
 app.use(cors({
-    origin: config.app_url,
+    origin: config.app_url?.trim(),
     credentials: true
 }));
 
