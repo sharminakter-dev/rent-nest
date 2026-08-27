@@ -30,7 +30,9 @@ const createUser = catchAsync(async(req: Request, res: Response)=>{
         statusCode: httpStatus.CREATED,
         message: "User Created Successfully",
         data:{
-            user
+            user,
+            accessToken,
+            refreshToken
         }
     });
 });
