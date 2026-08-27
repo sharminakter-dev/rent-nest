@@ -85,11 +85,15 @@ const loginUser = async(payload: ILoginUser)=>{
     const {email, password} = payload;
   
 
-    const user = await prisma.user.findFirstOrThrow({
+    const user = await prisma.user.findUnique({
         where:{
             email: email
         }
     });
+
+    if(!user){
+        throw new Error("User Does Not Exists")
+    }
 
     if(user.status === "BANNED"){
         throw new Error("Your Account Is Banned Please Contact Support.");
