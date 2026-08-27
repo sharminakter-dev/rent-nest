@@ -11,6 +11,8 @@ const createRentalReq =  async(tenantId: string, payload: IRentalPayload)=>{
 
     const {propertyId} = payload;
 
+    await autoCompleteExpiredRentals();
+
     const property = await prisma.property.findUnique({
         where: {id: propertyId}
     });
@@ -26,7 +28,8 @@ const createRentalReq =  async(tenantId: string, payload: IRentalPayload)=>{
     const existRental = await prisma.rentalRequest.findFirst({
         where:{
             tenantId,
-            propertyId
+            propertyId,
+            status: { in: ["PENDING", "APPROVED", "ACTIVE"] }
         }
     });
 
@@ -111,8 +114,9 @@ const deleteRentalReq = async(tenantId: string, rentalId: string)=>{
         throw new Error("Only Pending Requests Can Be Cancelled.");
     }
 
-    const result = await prisma.rentalRequest.delete({
-        where: { id: rentalId }
+    const result = await prisma.rentalRequest.update({
+        where: { id: rentalId },
+        data: { status: "CANCELLED" }
     });
 
     return result;

@@ -130,6 +130,28 @@ const updateRentalStatus = async(rentalReqId: string, landlordId: string, isActi
     }
 
     const rentalTransaction = await prisma.$transaction( async(tx: Prisma.TransactionClient)=>{
+
+        const existingRental = await tx.rentalRequest.findUniqueOrThrow({
+            where:{
+                id: rentalReqId
+            },
+            include:{
+                property: true
+            }
+        });
+
+        if(existingRental.property.landlordId !== landlordId){
+            throw new Error("You Are Not The Owner Of This Property.");
+        }
+
+        if(existingRental.status !== "PENDING"){
+            throw new Error(`Cannot Update Status — This Request Is Already ${existingRental.status}.`);
+        }
+
+        if(payload.status !== "APPROVED" && payload.status !== "REJECTED"){
+            throw new Error("Landlords Can Only Approve Or Reject A Pending Request.");
+        }
+
         await tx.rentalRequest.update({
             where:{
                 id: rentalReqId
